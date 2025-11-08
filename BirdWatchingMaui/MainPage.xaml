@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:BirdWatchingMaui"
+             xmlns:models="clr-namespace:BirdWatchingMaui.Models"
+             xmlns:converters="clr-namespace:BirdWatchingMaui.Converters"
+             x:Class="BirdWatchingMaui.MainPage"
+             x:DataType="viewmodel:BirdSightingsViewModel"
+             Title="Bird Sightings">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16">
+        
+        <!-- Search Bar -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,0,0,16">
+            <Entry 
+                Grid.Column="0"
+                Text="{Binding SearchQuery}"
+                Placeholder="Search birds by species, location..."
+                ReturnCommand="{Binding SearchBirdsCommand}" />
+            <Button 
+                Grid.Column="1"
+                Text="Search"
+                Command="{Binding SearchBirdsCommand}" />
+        </Grid>
+
+        <!-- Refresh Button -->
+        <Button 
+            Grid.Row="1"
+            Text="Refresh Data"
+            Command="{Binding LoadDataCommand}"
+            Margin="0,0,0,16" />
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator 
+            Grid.Row="2"
+            IsRunning="{Binding IsLoading}"
+            IsVisible="{Binding IsLoading}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center" />
+
+        <!-- Birds List -->
+        <CollectionView 
+            Grid.Row="2"
+            ItemsSource="{Binding Birds}"
+            SelectionMode="Single"
+            SelectionChanged="OnBirdSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Bird">
+                    <Grid Padding="16" ColumnDefinitions="*,Auto">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBirdTapped" />
+                        </Grid.GestureRecognizers>
+                        <StackLayout Grid.Column="0" Spacing="4">
+                            <Label 
+                                Text="{Binding Species}"
+                                FontSize="18"
+                                FontAttributes="Bold" />
+                            <Label 
+                                Text="{Binding Location}"
+                                FontSize="14"
+                                TextColor="Gray" />
+                            <Label 
+                                Text="{Binding Quantity, StringFormat='Quantity: {0}'}"
+                                FontSize="12"
+                                TextColor="Gray" />
+                            <Label 
+                                Text="{Binding Comments}"
+                                FontSize="12"
+                                TextColor="Gray"
+                                IsVisible="{Binding Comments, Converter={StaticResource IsNotNull}}" />
+                        </StackLayout>
+                        <Label 
+                            Grid.Column="1"
+                            Text="{Binding Quantity, StringFormat='x{0}'}"
+                            FontSize="24"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Empty State -->
+        <Label 
+            Grid.Row="2"
+            Text="No bird sightings found. Make sure you have uploaded data from the Android app."
+            IsVisible="{Binding Birds.Count, Converter={StaticResource CountToBool}}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            HorizontalTextAlignment="Center"
+            TextColor="Gray" />
+
+    </Grid>
+
+</ContentPage>
+

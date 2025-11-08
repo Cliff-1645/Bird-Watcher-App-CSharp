@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:BirdWatchingMaui.Models"
+             xmlns:converters="clr-namespace:BirdWatchingMaui.Converters"
+             x:Class="BirdWatchingMaui.BirdDetailsPage"
+             Title="Bird Details">
+
+    <ScrollView>
+        <StackLayout Padding="16" Spacing="16">
+            
+            <Frame Padding="16" HasShadow="True">
+                <StackLayout Spacing="12">
+                    <Label 
+                        Text="{Binding Species}"
+                        FontSize="24"
+                        FontAttributes="Bold" />
+                    
+                    <Label 
+                        Text="{Binding Location, StringFormat='Location: {0}'}"
+                        FontSize="16" />
+                    
+                    <Label 
+                        Text="{Binding Quantity, StringFormat='Quantity: {0}'}"
+                        FontSize="16" />
+                    
+                    <Label 
+                        Text="{Binding Comments, StringFormat='Comments: {0}'}"
+                        FontSize="16"
+                        IsVisible="{Binding Comments, Converter={StaticResource IsNotNull}}" />
+                    
+                    <Label 
+                        Text="{Binding SpottedTime, StringFormat='Time: {0}'}"
+                        FontSize="16"
+                        IsVisible="{Binding SpottedTime, Converter={StaticResource IsNotNull}}" />
+                </StackLayout>
+            </Frame>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>
+
